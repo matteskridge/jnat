@@ -1,5 +1,9 @@
 package org.jnat.swing;
 
+import org.jnat.swing.listeners.NEvent;
+import org.jnat.swing.listeners.NEventListener;
+import org.jnat.swing.menu.NMenu;
+import org.jnat.swing.menu.NMenuBar;
 import org.jnat.swing.panels.NBorderPanel;
 import org.jnat.swing.panels.NPanel;
 import org.jnat.swing.panels.NWindowCenterPanel;
@@ -9,6 +13,7 @@ import org.jnat.swing.toolbar.NToolbarWidget;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Created by Matt Eskridge on 5/10/14.
@@ -16,14 +21,23 @@ import java.lang.reflect.Method;
  * @author Matt Eskridge
  */
 public class NFrame extends JFrame {
-	private NPanel contentPane;
+	private JPanel contentPane;
 	private NToolbar toolbar;
-	private NPanel center;
+	private NWindowCenterPanel center;
+	private NMenuBar menu;
+
+	private ArrayList<NEventListener> listeners = new ArrayList();
 
 	private boolean toolbarShown = false;
+	private boolean menuBarShown = false;
 
 	public NFrame() {
 		init();
+	}
+
+	public NFrame(String text) {
+		init();
+		setTitle(text);
 	}
 
 	/**
@@ -38,19 +52,22 @@ public class NFrame extends JFrame {
 		if (JnatUtilities.isMac()) initMac();
 
 		// Initialize variables
-		contentPane = new NWindowCenterPanel();
+		contentPane = new JPanel();
 		toolbar = new NToolbar();
-		center = new NBorderPanel();
+		menu = new NMenuBar();
+		center = new NWindowCenterPanel();
+
+		// Initialize the content pane
+		contentPane.setLayout(new BorderLayout());
 
 		// Set GUI properties
-		setTitle("JNAT - Java Native Appearance Toolkit");
-		setSize(new Dimension(600,500));
+		setTitle("JNAT - Java Native Application Toolkit");
+		setSize(new Dimension(600, 500));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setContentPane(contentPane);
 
 		// Add components to the content pane
-		contentPane.add(toolbar, BorderLayout.NORTH);
 		contentPane.add(center, BorderLayout.CENTER);
 	}
 
@@ -61,6 +78,9 @@ public class NFrame extends JFrame {
 	private void initMac() {
 		// Show the apple fullscreen button.
 		try {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", getTitle());
+
 			Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 			Class params[] = new Class[]{Window.class, Boolean.TYPE};
 			Method method = util.getMethod("setWindowCanFullScreen", params);
@@ -123,13 +143,47 @@ public class NFrame extends JFrame {
 		toolbar.addToolbarSeparator();
 	}
 
+	/**
+	 * This method is used to set certain OS properties which only apply
+	 * when the toolbar is visible.
+	 */
 	private void showToolbar() {
 		if (toolbarShown) return;
 
+		// Add the toolbar
+		contentPane.add(toolbar, BorderLayout.NORTH);
+
+		// Perform OS specific setup
 		if (JnatUtilities.isMac()) {
 			getRootPane().putClientProperty("apple.awt.brushMetalLook", true);
 		}
 
 		toolbarShown = true;
+	}
+
+	private void showMenuBar() {
+		if (menuBarShown) return;
+
+		setJMenuBar(menu);
+
+		menuBarShown = true;
+	}
+
+	public void addMenu(NMenu file) {
+		showMenuBar();
+		menu.add(file);
+	}
+
+	private void trigger(String text) {
+		NEvent event = new NEvent();
+		event.setAction(text);
+
+		for (NEventListener listen: listeners) {
+			listen.eventOccurred(event);
+		}
+	}
+
+	public void addEventListener(NEventListener listener) {
+		listeners.add(listener);
 	}
 }

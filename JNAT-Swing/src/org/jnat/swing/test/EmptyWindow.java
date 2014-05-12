@@ -8,7 +8,7 @@ import org.jnat.swing.NFrame;
  */
 public class EmptyWindow {
 	public static void main(String[] args) {
-		NFrame frame = new NFrame();
+		NFrame frame = new NFrame("Empty Window");
 		frame.setVisible(true);
 	}
 }

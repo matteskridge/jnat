@@ -11,5 +11,6 @@ import java.awt.*;
  */
 public class NWindowCenterPanel extends NBorderPanel {
 	public NWindowCenterPanel() {
+
 	}
 }
