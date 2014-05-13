@@ -7,6 +7,9 @@ import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuItem;
 import org.jnat.swing.toolbar.NToolbarButton;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * @author Matt Eskridge
  * @created 5/10/14
@@ -20,7 +23,7 @@ public class EmptyWindowWithToolbar implements NEventListener {
 		frame.addToolbar(new NToolbarButton("new", "New File"));
 		frame.addToolbar(new NToolbarButton("open", "Open"));
 
-		// Initialize the menu file menu
+		// Initialize the menu
 		NMenu file = new NMenu("App");
 		file.add(new NMenuItem("exit", "Exit"));
 		frame.addMenu(file);
@@ -37,6 +40,8 @@ public class EmptyWindowWithToolbar implements NEventListener {
 
 		} else if (e.getAction().equals("open")) {
 
+		} else if (e.getAction().equals("exit")) {
+			System.exit(0);
 		}
 	}
 }

@@ -28,7 +28,12 @@ public class NToolbarButton extends NToolbarGradientWidget {
 		// If there is no icon, add a regular label
 		if (icon == null) {
 			JLabel label = new JLabel(name);
+			label.addMouseListener(this);
 			add(label);
 		}
+	}
+
+	public void click() {
+		trigger(id);
 	}
 }

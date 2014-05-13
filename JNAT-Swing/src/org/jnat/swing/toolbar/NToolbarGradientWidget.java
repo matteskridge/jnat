@@ -10,7 +10,7 @@ import java.awt.event.MouseListener;
  * @author Matt Eskridge
  * @created 5/11/14
  */
-public class NToolbarGradientWidget extends NToolbarWidget implements MouseListener {
+public abstract class NToolbarGradientWidget extends NToolbarWidget implements MouseListener {
 	private int round = 5;
 	private boolean active = false;
 
@@ -49,7 +49,7 @@ public class NToolbarGradientWidget extends NToolbarWidget implements MouseListe
 	}
 
 	public void mouseClicked(MouseEvent mouseEvent) {
-
+		click();
 	}
 
 	public void mousePressed(MouseEvent mouseEvent) {
@@ -69,4 +69,6 @@ public class NToolbarGradientWidget extends NToolbarWidget implements MouseListe
 	public void mouseExited(MouseEvent mouseEvent) {
 
 	}
+
+	public abstract void click();
 }

@@ -53,8 +53,8 @@ public class NFrame extends JFrame {
 
 		// Initialize variables
 		contentPane = new JPanel();
-		toolbar = new NToolbar();
-		menu = new NMenuBar();
+		toolbar = new NToolbar(this);
+		menu = new NMenuBar(this);
 		center = new NWindowCenterPanel();
 
 		// Initialize the content pane
@@ -174,7 +174,7 @@ public class NFrame extends JFrame {
 		menu.add(file);
 	}
 
-	private void trigger(String text) {
+	public void trigger(String text) {
 		NEvent event = new NEvent();
 		event.setAction(text);
 

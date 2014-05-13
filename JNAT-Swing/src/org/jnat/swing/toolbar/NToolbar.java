@@ -1,6 +1,7 @@
 package org.jnat.swing.toolbar;
 
 import org.jnat.swing.JnatUtilities;
+import org.jnat.swing.NFrame;
 import org.jnat.swing.panels.NPanel;
 
 import javax.swing.*;
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 public class NToolbar extends JPanel {
 
 	private ArrayList<NToolbarWidget> items;
+	private NFrame master;
 	private int b = 5, bottom = 2, left = 3, distance = 5;
 
-	public NToolbar() {
-		items = new ArrayList();
+	public NToolbar(NFrame master) {
+		this.items = new ArrayList();
+		this.master = master;
 
 		if (JnatUtilities.isMac()) {
 			setOpaque(false);
@@ -30,10 +33,15 @@ public class NToolbar extends JPanel {
 		}
 	}
 
+	public void trigger(String event) {
+		master.trigger(event);
+	}
+
 	public void addToolbarSeparator() {
 	}
 
 	public void addToolbar(NToolbarWidget widget) {
+		widget.setToolbar(this);
 		items.add(widget);
 		add(widget);
 	}
