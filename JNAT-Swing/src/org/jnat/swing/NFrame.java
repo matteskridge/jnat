@@ -7,6 +7,7 @@ import org.jnat.swing.menu.NMenuBar;
 import org.jnat.swing.panels.NBorderPanel;
 import org.jnat.swing.panels.NPanel;
 import org.jnat.swing.panels.NWindowCenterPanel;
+import org.jnat.swing.toolbar.NSearchBar;
 import org.jnat.swing.toolbar.NToolbar;
 import org.jnat.swing.toolbar.NToolbarWidget;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  */
 public class NFrame extends JFrame {
 	private JPanel contentPane;
+
 	private NToolbar toolbar;
 	private NWindowCenterPanel center;
 	private NMenuBar menu;
@@ -185,5 +187,9 @@ public class NFrame extends JFrame {
 
 	public void addEventListener(NEventListener listener) {
 		listeners.add(listener);
+	}
+
+	public void setSearchEnabled(boolean search) {
+		toolbar.setSearchEnabled(search);
 	}
 }

@@ -6,9 +6,7 @@ import org.jnat.swing.listeners.NEventListener;
 import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuItem;
 import org.jnat.swing.toolbar.NToolbarButton;
-
-import javax.swing.*;
-import java.awt.*;
+import org.jnat.swing.toolbar.NIcon;
 
 /**
  * @author Matt Eskridge
@@ -22,6 +20,12 @@ public class EmptyWindowWithToolbar implements NEventListener {
 		// Initialize the toolbar
 		frame.addToolbar(new NToolbarButton("new", "New File"));
 		frame.addToolbar(new NToolbarButton("open", "Open"));
+		frame.addToolbar(new NToolbarButton("refresh", new NIcon("Refresh")));
+		frame.addToolbar(new NToolbarButton("add", new NIcon("Add")));
+		frame.addToolbar(new NToolbarButton("share", "Share", new NIcon("Share")));
+
+		// Set a few GUI properties
+		frame.setSearchEnabled(true);
 
 		// Initialize the menu
 		NMenu file = new NMenu("App");

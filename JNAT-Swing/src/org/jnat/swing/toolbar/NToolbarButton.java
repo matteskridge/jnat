@@ -16,7 +16,15 @@ public class NToolbarButton extends NToolbarGradientWidget {
 		init(id, name, null);
 	}
 
-	private void init(String id, String name, Image icon) {
+	public NToolbarButton(String id, String name, NIcon icon) {
+		init(id, name, icon);
+	}
+
+	public NToolbarButton(String id, NIcon icon) {
+		init(id, null, icon);
+	}
+
+	private void init(String id, String name, NIcon icon) {
 		// Set a few variables
 		this.id = id;
 		this.name = name;
@@ -29,6 +37,21 @@ public class NToolbarButton extends NToolbarGradientWidget {
 		if (icon == null) {
 			JLabel label = new JLabel(name);
 			label.addMouseListener(this);
+			add(label);
+		} else {
+			int b = 1;
+
+			JLabel label;
+			if (name == null) {
+				label = new JLabel();
+			} else {
+				b = 0;
+				label = new JLabel(name);
+			}
+
+			label.addMouseListener(this);
+			label.setBorder(BorderFactory.createEmptyBorder(b,b,b,b));
+			label.setIcon(icon.getIcon(14));
 			add(label);
 		}
 	}

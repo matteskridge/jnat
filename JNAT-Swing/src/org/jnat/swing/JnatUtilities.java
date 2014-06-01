@@ -55,4 +55,12 @@ public class JnatUtilities {
 	public static boolean isMac() {
 		return getOperatingSystem() == JNAT_MAC;
 	}
+
+	public static String getOperatingSystemId() {
+		if (isMac()) {
+			return "mac";
+		} else {
+			return "generic";
+		}
+	}
 }
