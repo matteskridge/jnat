@@ -1,13 +1,14 @@
-package org.jnat.swing.listeners;
+package org.jnat.swing.events;
 
 /**
  * @author Matt Eskridge
  * @created 5/11/14
  */
 public class NEvent {
+
 	private String action;
 
-	public void setAction(String action) {
+	public NEvent(String action) {
 		this.action = action;
 	}
 

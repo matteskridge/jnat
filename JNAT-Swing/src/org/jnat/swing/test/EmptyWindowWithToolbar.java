@@ -1,8 +1,9 @@
 package org.jnat.swing.test;
 
 import org.jnat.swing.NFrame;
-import org.jnat.swing.listeners.NEvent;
-import org.jnat.swing.listeners.NEventListener;
+import org.jnat.swing.events.NEvent;
+import org.jnat.swing.events.NEventListener;
+import org.jnat.swing.events.NSearchEvent;
 import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuItem;
 import org.jnat.swing.toolbar.NToolbarButton;
@@ -13,9 +14,12 @@ import org.jnat.swing.toolbar.NIcon;
  * @created 5/10/14
  */
 public class EmptyWindowWithToolbar implements NEventListener {
+
+	private static NFrame frame;
+
 	public static void main(String[] args) {
 		// Create the GUI
-		NFrame frame = new NFrame("Empty Window with Toolbar");
+		frame = new NFrame("Empty Window with Toolbar");
 
 		// Initialize the toolbar
 		frame.addToolbar(new NToolbarButton("new", "New File"));
@@ -46,6 +50,9 @@ public class EmptyWindowWithToolbar implements NEventListener {
 
 		} else if (e.getAction().equals("exit")) {
 			System.exit(0);
+		} else if (e instanceof NSearchEvent) {
+			String query = ((NSearchEvent)e).getQuery();
+			frame.showDialog(query);
 		}
 	}
 }

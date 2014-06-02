@@ -1,4 +1,4 @@
-package org.jnat.swing.listeners;
+package org.jnat.swing.events;
 
 /**
  * @author Matt Eskridge

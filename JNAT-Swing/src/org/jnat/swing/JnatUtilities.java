@@ -1,6 +1,7 @@
 package org.jnat.swing;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Matt Eskridge
@@ -61,6 +62,18 @@ public class JnatUtilities {
 			return "mac";
 		} else {
 			return "generic";
+		}
+	}
+
+	public static Color getOperatingSystemColor() {
+		return getOperatingSystemColor(getOperatingSystem());
+	}
+
+	public static Color getOperatingSystemColor(int os) {
+		if (os == JNAT_MAC) {
+			return Color.decode("#666666");
+		} else {
+			return null;
 		}
 	}
 }

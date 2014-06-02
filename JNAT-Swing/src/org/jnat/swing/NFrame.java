@@ -1,13 +1,10 @@
 package org.jnat.swing;
 
-import org.jnat.swing.listeners.NEvent;
-import org.jnat.swing.listeners.NEventListener;
+import org.jnat.swing.events.*;
 import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuBar;
-import org.jnat.swing.panels.NBorderPanel;
 import org.jnat.swing.panels.NPanel;
 import org.jnat.swing.panels.NWindowCenterPanel;
-import org.jnat.swing.toolbar.NSearchBar;
 import org.jnat.swing.toolbar.NToolbar;
 import org.jnat.swing.toolbar.NToolbarWidget;
 
@@ -23,6 +20,8 @@ import java.util.ArrayList;
  */
 public class NFrame extends JFrame {
 	private JPanel contentPane;
+	private JPanel card;
+	private CardLayout cl;
 
 	private NToolbar toolbar;
 	private NWindowCenterPanel center;
@@ -57,6 +56,7 @@ public class NFrame extends JFrame {
 		contentPane = new JPanel();
 		toolbar = new NToolbar(this);
 		menu = new NMenuBar(this);
+		card = new JPanel();
 		center = new NWindowCenterPanel();
 
 		// Initialize the content pane
@@ -69,8 +69,13 @@ public class NFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setContentPane(contentPane);
 
+		// Initialize the card panel
+		card.setLayout(cl = new CardLayout());
+		card.add(center, "");
+		cl.show(card, "");
+
 		// Add components to the content pane
-		contentPane.add(center, BorderLayout.CENTER);
+		contentPane.add(card, BorderLayout.CENTER);
 	}
 
 	/**
@@ -177,12 +182,18 @@ public class NFrame extends JFrame {
 	}
 
 	public void trigger(String text) {
-		NEvent event = new NEvent();
-		event.setAction(text);
+		trigger(new NEvent(text));
+	}
 
+	public void trigger(NEvent event) {
+		eventOccurred(event);
 		for (NEventListener listen: listeners) {
 			listen.eventOccurred(event);
 		}
+	}
+
+	public void eventOccurred(NEvent event) {
+
 	}
 
 	public void addEventListener(NEventListener listener) {
@@ -191,5 +202,86 @@ public class NFrame extends JFrame {
 
 	public void setSearchEnabled(boolean search) {
 		toolbar.setSearchEnabled(search);
+	}
+
+	public void setTabsEnabled(boolean enabled) {
+		toolbar.setTabsEnabled(enabled);
+		showToolbar();
+	}
+
+	public void setTabsClosable(boolean closable) {
+		toolbar.setTabsClosable(closable);
+	}
+
+	public void setTabsDefaultShown(boolean shown) {
+		toolbar.setTabsDefaultShown(shown);
+	}
+
+	public void setTabsUserAddable(boolean userAddable) {
+		toolbar.setTabsUserAddable(userAddable);
+	}
+
+	public void showDialog(String message) {
+		showDialog("Dialog", message);
+	}
+
+	public void showDialog(String title, String message) {
+		JOptionPane.showMessageDialog(this, message);
+	}
+
+	public Component addTab() {
+		return addTab("");
+	}
+
+	public Component addTab(String name) {
+		return addTab(name, new NPanel());
+	}
+
+	public Component addTab(Component comp) {
+		return addTab("", comp);
+	}
+
+	public Component addTab(String name, Component comp) {
+		return addTab(name, comp, false);
+	}
+
+	public Component addTab(String name, Component comp, boolean background) {
+		String id = ""+System.currentTimeMillis();
+		card.add(comp, id);
+
+		if (!background) {
+			cl.show(card, id);
+		}
+
+		toolbar.tabAdded(id, name, comp, !background);
+		return comp;
+	}
+
+	public void selectTab(String id) {
+		cl.show(card, id);
+		toolbar.tabSelected(id);
+	}
+
+	public void removeTab(String id) {
+		String closest = toolbar.getClosestTab(id);
+		toolbar.tabRemoved(id);
+		selectTab(closest);
+	}
+
+	public void requestHomeTab() {
+		selectTab("");
+	}
+
+	public void requestAddTab() {
+		trigger(new NAddTabEvent());
+	}
+
+	public void requestCloseTab(String id) {
+		removeTab(id);
+	}
+
+	public void requestSelectTab(String id, Component comp) {
+		selectTab(id);
+		trigger(new NSelectTabEvent(id, comp));
 	}
 }

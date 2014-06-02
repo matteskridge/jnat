@@ -1,5 +1,7 @@
 package org.jnat.swing.toolbar;
 
+import org.jnat.swing.JnatUtilities;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -51,7 +53,7 @@ public class NToolbarButton extends NToolbarGradientWidget {
 
 			label.addMouseListener(this);
 			label.setBorder(BorderFactory.createEmptyBorder(b,b,b,b));
-			label.setIcon(icon.getIcon(14));
+			label.setIcon(icon.getIcon(14, JnatUtilities.getOperatingSystem()));
 			add(label);
 		}
 	}

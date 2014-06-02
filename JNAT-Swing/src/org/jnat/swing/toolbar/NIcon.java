@@ -41,7 +41,6 @@ public class NIcon {
 		if (NIcon.class.getResource("NIcon.class").getProtocol().equals("file")) {
 			try {
 				File file = new File("JNAT-Swing/src/"+path);
-				System.out.println(file.getAbsolutePath());
 				return new FileInputStream(file);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -64,12 +63,12 @@ public class NIcon {
 	}
 
 	public BufferedImage getImage(int size, Color tint) {
-		BufferedImage resized = getImage(size);
-
 		ColorTintFilter filter = new ColorTintFilter(tint, 1f);
-		resized = filter.filter(resized);
+		return filter.filter(getImage(size), null);
+	}
 
-		return resized;
+	public BufferedImage getImage(int size, int os) {
+		return getImage(size, JnatUtilities.getOperatingSystemColor(os));
 	}
 
 	public Icon getIcon(int size) {
@@ -78,5 +77,9 @@ public class NIcon {
 
 	public Icon getIcon(int size, Color tint) {
 		return new ImageIcon(getImage(size, tint));
+	}
+
+	public Icon getIcon(int size, int os) {
+		return new ImageIcon(getImage(size, os));
 	}
 }
