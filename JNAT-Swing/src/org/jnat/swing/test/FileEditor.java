@@ -21,7 +21,7 @@ public class FileEditor extends NFrame {
 	private NFileEditor selected;
 
 	public FileEditor() {
-		super("File Editor");
+		super("JNAT File Editor");
 
 		// Initialize the toolbar
 		addToolbar(new NToolbarButton("new", "New File"));

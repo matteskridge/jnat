@@ -1,10 +1,7 @@
 package org.jnat.swing.editor;
 
 import org.jnat.swing.JnatUtilities;
-import org.jnat.swing.editor.color.NTextColorJavaParser;
-import org.jnat.swing.editor.color.NTextColorParser;
-import org.jnat.swing.editor.color.NTextColorXmlParser;
-import org.jnat.swing.editor.color.NTextColorYmlParser;
+import org.jnat.swing.editor.color.*;
 import org.jnat.swing.general.NScrollPane;
 import org.jnat.swing.events.NEvent;
 import org.jnat.swing.events.NEventListener;
@@ -33,6 +30,7 @@ public class NTextEditor extends NPanel implements MouseListener, KeyListener, N
 	private String format;
 	private NTextEditorUpdater updater;
 	private int b = 5;
+	private int tabsize = 4;
 
 	public NTextEditor() {
 		setName("Text Editor");
@@ -72,10 +70,19 @@ public class NTextEditor extends NPanel implements MouseListener, KeyListener, N
 		return text;
 	}
 
+	public String getTab() {
+		String tab = "";
+		for (int i = 0; i < tabsize; i++) {
+			tab += " ";
+		}
+		return tab;
+	}
+
 	public void setText(String text) {
 		text = text.replace("<", "&lt;");
 		text = text.replace(">", "&gt;");
-		text = text.replace("\n", "<br />");
+		text = text.replace("\n", "<br>");
+		text = text.replace("\t", getTab());
 
 		String css = "* { tab-size:4; }";
 		String begin = "<html><head><style type='text/css'>"+css+"</style></head><body><pre>";
@@ -101,6 +108,8 @@ public class NTextEditor extends NPanel implements MouseListener, KeyListener, N
 			parser = new NTextColorJavaParser();
 		} else if (format.equals("cpp")) {
 
+		} else if (format.equals("php")) {
+			parser = new NTextColorPhpParser();
 		}
 
 		if (parser != null) {
@@ -145,7 +154,26 @@ public class NTextEditor extends NPanel implements MouseListener, KeyListener, N
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		if (pane.getSelectionStart() != pane.getSelectionEnd())
+			return;
 
+		int selection = pane.getSelectionStart();
+		int begin = pane.getText().lastIndexOf("<br>", selection);
+		boolean meets = true;
+
+		if (selection == begin) return;
+
+		for (int i = begin; i < selection; i++) {
+			if (!pane.getText().substring(i,i+1).equals(" ")) {
+				meets = false;
+			}
+		}
+
+		if (meets) {
+			int index = (selection-begin)/4;
+			pane.setSelectionStart(index);
+			pane.setSelectionEnd(index);
+		}
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -175,7 +203,7 @@ public class NTextEditor extends NPanel implements MouseListener, KeyListener, N
 
 	class NTextEditorUpdater implements ActionListener {
 		private Timer timer;
-		private int delay = 1000;
+		private int delay = 250;
 
 		public NTextEditorUpdater() {
 			timer = new Timer(delay, this);

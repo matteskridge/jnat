@@ -90,6 +90,7 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 	public void valueChanged(ListSelectionEvent e) {
 		int index = e.getFirstIndex();
 		File f = new File(file.getAbsolutePath()+File.separator+table.getModel().getValueAt(index,0));
+
 		if (!e.getValueIsAdjusting() && f.exists() && f.isDirectory()) {
 			selectDirectory(f);
 		} else if (!e.getValueIsAdjusting() && f.exists()) {
@@ -98,5 +99,7 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 				listener.eventOccurred(event);
 			}
 		}
+
+		table.clearSelection();
 	}
 }
