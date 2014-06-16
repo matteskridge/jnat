@@ -4,11 +4,13 @@ import org.jnat.swing.NFrame;
 import org.jnat.swing.editor.NFileChooser;
 import org.jnat.swing.editor.NFileEditor;
 import org.jnat.swing.events.NEvent;
-import org.jnat.swing.events.NAddTabEvent;
-import org.jnat.swing.events.NSelectTabEvent;
+import org.jnat.swing.events.file.NFileSelectedEvent;
+import org.jnat.swing.events.tab.NAddTabEvent;
+import org.jnat.swing.events.tab.NSelectTabEvent;
 import org.jnat.swing.toolbar.NToolbarButton;
 
 import java.awt.*;
+import java.io.File;
 
 /**
  * @author Matt Eskridge
@@ -26,14 +28,14 @@ public class FileEditor extends NFrame {
 		addToolbar(new NToolbarButton("open", "Open"));
 		addToolbar(new NToolbarButton("save", "Save"));
 
-		// Configure GUI properties
+		// Configure tab properties
 		setTabsEnabled(true);
 		setTabsClosable(true);
 		setTabsDefaultShown(true);
 		setTabsUserAddable(true);
 
 		// Configure the start tab
-		add(new NFileChooser(), BorderLayout.CENTER);
+		add(new NFileChooser(this), BorderLayout.CENTER);
 
 		// Finish showing the GUI
 		setVisible(true);
@@ -42,12 +44,12 @@ public class FileEditor extends NFrame {
 	public void eventOccurred(NEvent event) {
 		if (event.getAction().equals("new") || (event instanceof NAddTabEvent)) {
 
-			// Add a new tab when the user clicks a button
+			// Add a new tab when the user clicks the add button
 			addTab("New File", selected = new NFileEditor());
 
 		} else if (event instanceof NSelectTabEvent) {
 
-			// When the user changes tabs, take note of that
+			// When the user changes tabs, store the current tab
 			Component selected = ((NSelectTabEvent) event).getComponent();
 			if (selected instanceof NFileEditor) {
 				NFileEditor editor = (NFileEditor)selected;
@@ -60,8 +62,14 @@ public class FileEditor extends NFrame {
 			if (selected.getFile() == null) {
 
 			} else {
-
+				selected.save();
 			}
+
+		} else if (event instanceof NFileSelectedEvent) {
+
+			// When the user selects a file, add the tab
+			File f = ((NFileSelectedEvent) event).getFile();
+			addTab(f.getName(), selected = new NFileEditor(f));
 
 		}
 	}

@@ -1,10 +1,14 @@
 package org.jnat.swing;
 
 import org.jnat.swing.events.*;
+import org.jnat.swing.events.action.NActionEvent;
+import org.jnat.swing.events.tab.NSelectTabEvent;
+import org.jnat.swing.events.tab.NAddTabEvent;
 import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuBar;
 import org.jnat.swing.panels.NPanel;
 import org.jnat.swing.panels.NWindowCenterPanel;
+import org.jnat.swing.toolbar.NIcon;
 import org.jnat.swing.toolbar.NToolbar;
 import org.jnat.swing.toolbar.NToolbarWidget;
 
@@ -18,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author Matt Eskridge
  */
-public class NFrame extends JFrame {
+public class NFrame extends JFrame implements NEventListener {
 	private JPanel contentPane;
 	private JPanel card;
 	private CardLayout cl;
@@ -64,6 +68,7 @@ public class NFrame extends JFrame {
 
 		// Set GUI properties
 		setTitle("JNAT - Java Native Application Toolkit");
+		setIconImage(new NIcon("JNAT").getImage(128));
 		setSize(new Dimension(600, 500));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,9 +90,11 @@ public class NFrame extends JFrame {
 	private void initMac() {
 		// Show the apple fullscreen button.
 		try {
+			// Set a few mac properties
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", getTitle());
 
+			// Show the mac fullscreen button
 			Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 			Class params[] = new Class[]{Window.class, Boolean.TYPE};
 			Method method = util.getMethod("setWindowCanFullScreen", params);
@@ -95,6 +102,32 @@ public class NFrame extends JFrame {
 		} catch (Exception e) {
 
 		}
+	}
+
+	private void setCrossPlatformIconImage(Image image) {
+		try {
+			// Get a reference to the mac application object
+			Class app = Class.forName("com.apple.eawt.Application");
+			Class appParams[] = new Class[]{};
+			Method method = app.getMethod("getApplication", appParams);
+			Object o = method.invoke(app);
+
+			// Set the mac dock image
+			Class setDockIconImage[] = new Class[]{Image.class};
+			method = app.getMethod("setDockIconImage", setDockIconImage);
+			method.invoke(o, image);
+		} catch (Exception e) {
+
+		}
+	}
+
+	public void setIconImage(NIcon icon) {
+		setIconImage(icon.getImage(128));
+	}
+
+	public void setIconImage(Image image) {
+		super.setIconImage(image);
+		setCrossPlatformIconImage(image);
 	}
 
 	/**
@@ -182,7 +215,7 @@ public class NFrame extends JFrame {
 	}
 
 	public void trigger(String text) {
-		trigger(new NEvent(text));
+		trigger(new NActionEvent(text));
 	}
 
 	public void trigger(NEvent event) {
@@ -193,7 +226,7 @@ public class NFrame extends JFrame {
 	}
 
 	public void eventOccurred(NEvent event) {
-
+		trigger(event);
 	}
 
 	public void addEventListener(NEventListener listener) {

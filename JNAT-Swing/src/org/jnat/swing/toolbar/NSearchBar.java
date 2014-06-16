@@ -1,7 +1,7 @@
 package org.jnat.swing.toolbar;
 
 import org.jnat.swing.JnatUtilities;
-import org.jnat.swing.events.NSearchEvent;
+import org.jnat.swing.events.search.NSearchEvent;
 
 import javax.swing.*;
 import java.awt.*;

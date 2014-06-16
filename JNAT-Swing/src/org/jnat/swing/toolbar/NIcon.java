@@ -71,15 +71,15 @@ public class NIcon {
 		return getImage(size, JnatUtilities.getOperatingSystemColor(os));
 	}
 
-	public Icon getIcon(int size) {
+	public ImageIcon getIcon(int size) {
 		return new ImageIcon(getImage(size));
 	}
 
-	public Icon getIcon(int size, Color tint) {
+	public ImageIcon getIcon(int size, Color tint) {
 		return new ImageIcon(getImage(size, tint));
 	}
 
-	public Icon getIcon(int size, int os) {
+	public ImageIcon getIcon(int size, int os) {
 		return new ImageIcon(getImage(size, os));
 	}
 }

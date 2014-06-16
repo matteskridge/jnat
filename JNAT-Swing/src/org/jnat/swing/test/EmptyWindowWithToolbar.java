@@ -3,7 +3,7 @@ package org.jnat.swing.test;
 import org.jnat.swing.NFrame;
 import org.jnat.swing.events.NEvent;
 import org.jnat.swing.events.NEventListener;
-import org.jnat.swing.events.NSearchEvent;
+import org.jnat.swing.events.search.NSearchEvent;
 import org.jnat.swing.menu.NMenu;
 import org.jnat.swing.menu.NMenuItem;
 import org.jnat.swing.toolbar.NToolbarButton;

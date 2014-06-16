@@ -1,5 +1,7 @@
 package org.jnat.swing.editor;
 
+import org.jnat.swing.events.NEventListener;
+import org.jnat.swing.events.file.NFileSelectedEvent;
 import org.jnat.swing.general.NScrollPane;
 import org.jnat.swing.general.table.NTable;
 import org.jnat.swing.general.table.NTableModel;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
  * @created 6/1/14
  */
 public class NFileChooser extends NPanel implements ListSelectionListener {
+
+	private ArrayList<NEventListener> listeners;
 	private NTable table;
 	private NScrollPane scroll;
 	private File file;
@@ -30,7 +34,20 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 		init();
 	}
 
+	public NFileChooser(NEventListener listener) {
+		init();
+		listeners.add(listener);
+	}
+
+	public NFileChooser(File source, NEventListener listener) {
+		this.file = file;
+		init();
+		listeners.add(listener);
+	}
+
 	private void init() {
+		listeners = new ArrayList();
+
 		setLayout(new BorderLayout());
 
 		if (file == null) {
@@ -75,6 +92,11 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 		File f = new File(file.getAbsolutePath()+File.separator+table.getModel().getValueAt(index,0));
 		if (!e.getValueIsAdjusting() && f.exists() && f.isDirectory()) {
 			selectDirectory(f);
+		} else if (!e.getValueIsAdjusting() && f.exists()) {
+			NFileSelectedEvent event = new NFileSelectedEvent(f);
+			for (NEventListener listener: listeners) {
+				listener.eventOccurred(event);
+			}
 		}
 	}
 }

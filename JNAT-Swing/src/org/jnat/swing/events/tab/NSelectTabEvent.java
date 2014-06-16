@@ -1,4 +1,6 @@
-package org.jnat.swing.events;
+package org.jnat.swing.events.tab;
+
+import org.jnat.swing.events.tab.NTabEvent;
 
 import java.awt.*;
 

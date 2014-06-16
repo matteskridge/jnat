@@ -76,4 +76,8 @@ public class JnatUtilities {
 			return null;
 		}
 	}
+
+	public static String getSystemLineSeparator() {
+		return String.format("%%n");
+	}
 }

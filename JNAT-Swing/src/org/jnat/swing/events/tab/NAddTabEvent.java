@@ -1,4 +1,4 @@
-package org.jnat.swing.events;
+package org.jnat.swing.events.tab;
 
 /**
  * @author Matt Eskridge

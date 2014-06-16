@@ -1,4 +1,6 @@
-package org.jnat.swing.events;
+package org.jnat.swing.events.search;
+
+import org.jnat.swing.events.NEvent;
 
 /**
  * @author Matt Eskridge
