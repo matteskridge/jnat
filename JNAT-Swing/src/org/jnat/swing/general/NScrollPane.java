@@ -18,7 +18,10 @@ public class NScrollPane extends JScrollPane {
 	}
 
 	private void init() {
+		setOpaque(false);
+		getViewport().setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder());
 		setViewportBorder(BorderFactory.createEmptyBorder());
+		getVerticalScrollBar().setUnitIncrement(16);
 	}
 }
