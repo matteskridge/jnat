@@ -14,14 +14,14 @@ import java.awt.event.ActionListener;
  */
 public class NSearchBar extends JPanel implements ActionListener {
 
-	private NToolbar master;
+	private Object master;
 	private JLabel icon;
 	private JTextField field;
 	private int b = 3, side = 5;
 
-	public NSearchBar(NToolbar bar) {
+	public NSearchBar(Object master) {
 		// Initialize a few variables
-		master = bar;
+		this.master = master;
 		icon = new JLabel((new NIcon("Search")).getIcon(16, JnatUtilities.getOperatingSystem()));
 		field = new JTextField(15);
 
@@ -55,6 +55,10 @@ public class NSearchBar extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		master.trigger(new NSearchEvent(field.getText()));
+		if (master instanceof NToolbar) {
+			NToolbar master = (NToolbar)this.master;
+			master.trigger(new NSearchEvent(field.getText()));
+		}
+
 	}
 }

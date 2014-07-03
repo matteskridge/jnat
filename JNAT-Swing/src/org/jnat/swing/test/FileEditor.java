@@ -1,7 +1,7 @@
 package org.jnat.swing.test;
 
 import org.jnat.swing.NFrame;
-import org.jnat.swing.editor.NFileChooser;
+import org.jnat.swing.editor.fileselector.NFileChooser;
 import org.jnat.swing.editor.NFileEditor;
 import org.jnat.swing.events.NEvent;
 import org.jnat.swing.events.file.NFileSelectedEvent;

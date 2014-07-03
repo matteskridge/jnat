@@ -1,8 +1,9 @@
-package org.jnat.swing.editor;
+package org.jnat.swing.editor.fileselector;
 
 import org.jnat.swing.events.NEventListener;
 import org.jnat.swing.events.file.NFileSelectedEvent;
 import org.jnat.swing.general.NScrollPane;
+import org.jnat.swing.general.NSourcePanel;
 import org.jnat.swing.general.table.NTable;
 import org.jnat.swing.general.table.NTableModel;
 import org.jnat.swing.panels.NPanel;
@@ -23,6 +24,9 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 	private ArrayList<NEventListener> listeners;
 	private NTable table;
 	private NScrollPane scroll;
+	private NFileControlBar top;
+	private NFileFinishBar finish;
+	private NSourcePanel side;
 	private File file;
 
 	public NFileChooser() {
@@ -60,11 +64,15 @@ public class NFileChooser extends NPanel implements ListSelectionListener {
 	public void selectDirectory(File folder) {
 		removeAll();
 
-		table = new NTable();
+		table = new NFileListTable();
 		ListSelectionModel cellSelectionModel = table.getSelectionModel();
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		cellSelectionModel.addListSelectionListener(this);
-		add(scroll = new NScrollPane(table));
+
+		add(top = new NFileControlBar(), BorderLayout.NORTH);
+		add(side = new NFavoritesSourcePanel(), BorderLayout.WEST);
+		add(scroll = new NScrollPane(table), BorderLayout.CENTER);
+		add(finish = new NFileFinishBar(), BorderLayout.SOUTH);
 
 		ArrayList<String> headers = new ArrayList();
 		headers.add("Name");
